@@ -4,11 +4,16 @@ using System.Text;
 
 namespace BankLedger.Constants
 {
-    enum MenuOption
+    enum UserAction
     {
         None = 0,
         LogIn,
         CreateAccount,
-
+        Deposit,
+        Withdrawal,
+        CheckBalance,
+        ViewTransactions,
+        LogOut,
+        DeleteLedger
     }
 }
