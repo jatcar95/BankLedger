@@ -4,7 +4,11 @@ using System.Text;
 
 namespace BankLedger.Constants
 {
-    enum UserAction
+
+    /// <summary>
+    /// Represents actions users can make in their account
+    /// </summary>
+    public enum UserAction
     {
         None = 0,
         LogIn,
