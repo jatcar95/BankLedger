@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BankLedger.Models;
 using System.Collections.Generic;
 using BankLedger.Constants;
+using System;
 
 namespace BankLedgerTests.ModelTests
 {
@@ -26,11 +27,11 @@ namespace BankLedgerTests.ModelTests
         public void TestAlterTransactions()
         {
             CollectionAssert.AreEqual(new List<Transaction>(), account.Transactions);
-            account.Transactions.Add(new Transaction(UserAction.Deposit, "test deposit"));
+            account.Transactions.Add(new Transaction(UserAction.Deposit, DateTimeOffset.Now, "test deposit"));
             CollectionAssert.AreEqual(new List<Transaction>(), account.Transactions);
 
             var transactions = new List<Transaction>();
-            transactions.Add(new Transaction(UserAction.Deposit, "test deposit"));
+            transactions.Add(new Transaction(UserAction.Deposit, DateTimeOffset.Now, "test deposit"));
             account = new Account("", "", 0, transactions);
             transactions.Clear();
             CollectionAssert.AreNotEqual(transactions, account.Transactions);
@@ -66,8 +67,8 @@ namespace BankLedgerTests.ModelTests
         {
             var transactions = new List<Transaction>
             {
-                new Transaction(UserAction.Deposit, "test deposit"),
-                new Transaction(UserAction.Withdrawal, "test withdrawal")
+                new Transaction(UserAction.Deposit, DateTimeOffset.Now, "test deposit"),
+                new Transaction(UserAction.Withdrawal, DateTimeOffset.Now, "test withdrawal")
             };
             account = new Account("testUsername", "testPassword", 0, transactions);
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
@@ -90,7 +91,7 @@ namespace BankLedgerTests.ModelTests
             var transactions = new List<Transaction>();
             account = account.Deposit(amount);
             Assert.AreEqual(100 + amount, account.Balance);
-            transactions.Add(new Transaction(UserAction.Deposit, $"Amount: {amount}, new balance: {100 + amount}"));
+            transactions.Add(new Transaction(UserAction.Deposit, DateTimeOffset.Now, $"Amount: {amount}, new balance: {100 + amount}"));
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
             for (var i = 0; i < transactions.Count; i++)
             {
@@ -104,7 +105,7 @@ namespace BankLedgerTests.ModelTests
         {
             var transactions = new List<Transaction>();
             account = account.Deposit(20);
-            transactions.Add(new Transaction(UserAction.Deposit, $"Amount: {20}, new balance: {120}"));
+            transactions.Add(new Transaction(UserAction.Deposit, DateTimeOffset.Now, $"Amount: {20}, new balance: {120}"));
             Assert.AreEqual(120, account.Balance);
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
             for (var i = 0; i < transactions.Count; i++)
@@ -114,7 +115,7 @@ namespace BankLedgerTests.ModelTests
             }
 
             account = account.Deposit(-20);
-            transactions.Add(new Transaction(UserAction.Deposit, $"Amount: {20}, new balance: {100}"));
+            transactions.Add(new Transaction(UserAction.Deposit, DateTimeOffset.Now, $"Amount: {20}, new balance: {100}"));
             Assert.AreEqual(100, account.Balance);
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
             for (var i = 0; i < transactions.Count; i++)
@@ -124,7 +125,7 @@ namespace BankLedgerTests.ModelTests
             }
 
             account = account.Deposit(1.00001);
-            transactions.Add(new Transaction(UserAction.Deposit, $"Amount: {1.00001}, new balance: {101.00001}"));
+            transactions.Add(new Transaction(UserAction.Deposit, DateTimeOffset.Now, $"Amount: {1.00001}, new balance: {101.00001}"));
             Assert.AreEqual(101.00001, account.Balance);
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
             for (var i = 0; i < transactions.Count; i++)
@@ -147,7 +148,7 @@ namespace BankLedgerTests.ModelTests
             var transactions = new List<Transaction>();
             account = account.Withdrawal(amount);
             Assert.AreEqual(100 - amount, account.Balance);
-            transactions.Add(new Transaction(UserAction.Withdrawal, $"Amount: {amount}, new balance: {100 - amount}"));
+            transactions.Add(new Transaction(UserAction.Withdrawal, DateTimeOffset.Now, $"Amount: {amount}, new balance: {100 - amount}"));
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
             for (var i = 0; i < transactions.Count; i++)
             {
@@ -161,7 +162,7 @@ namespace BankLedgerTests.ModelTests
         {
             var transactions = new List<Transaction>();
             account = account.Withdrawal(20);
-            transactions.Add(new Transaction(UserAction.Withdrawal, $"Amount: {20}, new balance: {80}"));
+            transactions.Add(new Transaction(UserAction.Withdrawal, DateTimeOffset.Now, $"Amount: {20}, new balance: {80}"));
             Assert.AreEqual(80, account.Balance);
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
             for (var i = 0; i < transactions.Count; i++)
@@ -171,7 +172,7 @@ namespace BankLedgerTests.ModelTests
             }
 
             account = account.Withdrawal(-20);
-            transactions.Add(new Transaction(UserAction.Withdrawal, $"Amount: {20}, new balance: {100}"));
+            transactions.Add(new Transaction(UserAction.Withdrawal, DateTimeOffset.Now, $"Amount: {20}, new balance: {100}"));
             Assert.AreEqual(100, account.Balance);
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
             for (var i = 0; i < transactions.Count; i++)
@@ -181,7 +182,7 @@ namespace BankLedgerTests.ModelTests
             }
 
             account = account.Withdrawal(1.00001);
-            transactions.Add(new Transaction(UserAction.Withdrawal, $"Amount: {1.00001}, new balance: {98.99999}"));
+            transactions.Add(new Transaction(UserAction.Withdrawal, DateTimeOffset.Now, $"Amount: {1.00001}, new balance: {98.99999}"));
             Assert.AreEqual(98.99999, account.Balance);
             Assert.AreEqual(transactions.Count, account.Transactions.Count);
             for (var i = 0; i < transactions.Count; i++)
